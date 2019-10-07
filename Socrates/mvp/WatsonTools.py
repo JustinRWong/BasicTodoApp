@@ -1,9 +1,10 @@
+from ibm_watson import NaturalLanguageUnderstandingV1
+from ibm_watson.natural_language_understanding_v1 import *
 import json
 from ibm_watson import ToneAnalyzerV3
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 from ibm_watson import ApiException
-from ibm_watson.natural_language_understanding_v1 import Features, SyntaxOptions, SyntaxOptionsTokens
-
+from ibm_watson import *
 
 with open("config.json", 'r') as f:
         config = json.load(f)
@@ -65,3 +66,89 @@ def to_sentiment_dict(ret_res):
 
     return sents_vector
 
+
+def get_categories(text_str, limit=3):
+    response = nlu.analyze(
+        text=text_str,
+        features=Features(categories=CategoriesOptions(limit=limit))
+    )
+
+    return response.get_result(), response.get_headers(), response.get_status_code()
+
+
+def get_concepts(text_str, limit=3):
+    response = nlu.analyze(
+        text=text_str,
+        features=Features(concepts=ConceptsOptions(limit=limit))
+    )
+
+    return response.get_result(), response.get_headers(), response.get_status_code()
+
+
+def get_targeted_emotion(text_str, target_words_and_phrase_list):
+    response = nlu.analyze(
+        text=text_str,
+        features=Features(emotion=EmotionOptions(targets=target_words_and_phrase_list))
+    )
+
+    return response.get_result(), response.get_headers(), response.get_status_code()
+
+
+def get_entity_info(text_str, limit):
+    response = nlu.analyze(
+        text=text_str,
+        features=Features(entities=EntitiesOptions(sentiment=True, mentions=True, emotion=True, limit=limit))
+    )
+
+    return response.get_result(), response.get_headers(), response.get_status_code()
+
+def get_keyword_info(text_str, limit):
+    response = nlu.analyze(
+        text=text_str,
+        features=Features(keywords=KeywordsOptions(sentiment=True,
+                                                   emotion=True,
+                                                   limit=limit
+                                                   )
+                          )
+    )
+
+    return response.get_result(), response.get_headers(), response.get_status_code()
+
+
+def get_relational_info(text_str):
+    response = nlu.analyze(
+        text=text_str,
+        features=Features(relations=RelationsOptions())
+    )
+
+    return response.get_result(), response.get_headers(), response.get_status_code()
+
+
+def get_semantic_roles(text_str, limit):
+    response = nlu.analyze(
+        text=text_str,
+        features=Features(semantic_roles=SemanticRolesOptions(keywords=True, entities=True, limit=limit))
+    )
+
+    return response.get_result(), response.get_headers(), response.get_status_code()
+
+
+def get_targeted_sentiment(text_str, target_words_phrases_list):
+    response = nlu.analyze(
+        text=text_str,
+        features=Features(sentiment=SentimentOptions(document=True, targets=target_words_phrases_list))
+    )
+
+    return response.get_result(), response.get_headers(), response.get_status_code()
+
+
+def get_syntax_info(text_str):
+    response = nlu.analyze(
+        text=text_str,
+        features=Features(syntax=SyntaxOptions(
+            sentences=True,
+            tokens=SyntaxOptionsTokens(lemma=True,
+                                       part_of_speech=True)))
+    )
+
+    return response.get_result(), response.get_headers(), response.get_status_code()
