@@ -40,10 +40,23 @@ def analyze_tone(inputtedTxt):
         # Invoke a Tone Analyzer method
         #         inputtedTxt = "Team, I know that times are tough! "
         j = tone_analyzer.tone({'text': inputtedTxt}, content_type='application/json')
-        return j.get_result(), j.get_headers(), j.get_status_code()
+
+        result = j.get_result(), j.get_headers(), j.get_status_code()
+
+        self.memo[inputtedTxt] = result
+
+        return result
+
     except ApiException as ex:
         print("Method failed with status code " + str(ex.code) + ": " + ex.message)
         raise ex
+
+
+analyze_tone.memo = {}
+
+
+
+
 
 
 def to_sentiment_dict(ret_res):
@@ -67,6 +80,12 @@ def to_sentiment_dict(ret_res):
     return sents_vector
 
 
+to_sentiment_dict.memo = {}
+
+
+
+
+
 def get_categories(text_str, limit=3):
     response = nlu.analyze(
         text=text_str,
@@ -76,13 +95,34 @@ def get_categories(text_str, limit=3):
     return response.get_result(), response.get_headers(), response.get_status_code()
 
 
+get_categories.memo = {}
+
+
+
+
+
+
+
 def get_concepts(text_str, limit=3):
+    if (text_str, limit) in self.memo.keys():
+        return self.memo[(text_str, limit)]
+
     response = nlu.analyze(
         text=text_str,
         features=Features(concepts=ConceptsOptions(limit=limit))
     )
 
-    return response.get_result(), response.get_headers(), response.get_status_code()
+    result = response.get_result(), response.get_headers(), response.get_status_code()
+    self.memo[(text_str, limit)] = result
+
+    return result
+
+
+get_concepts.memo = {}
+
+
+
+
 
 
 def get_targeted_emotion(text_str, target_words_and_phrase_list):
@@ -91,7 +131,15 @@ def get_targeted_emotion(text_str, target_words_and_phrase_list):
         features=Features(emotion=EmotionOptions(targets=target_words_and_phrase_list))
     )
 
-    return response.get_result(), response.get_headers(), response.get_status_code()
+    result = response.get_result(), response.get_headers(), response.get_status_code()
+
+    self.memo[(text_str, target_words_and_phrase_list)] = result
+
+    return result
+
+
+get_targeted_emotion.memo = {}
+
 
 
 def get_entity_info(text_str, limit):
@@ -100,7 +148,20 @@ def get_entity_info(text_str, limit):
         features=Features(entities=EntitiesOptions(sentiment=True, mentions=True, emotion=True, limit=limit))
     )
 
-    return response.get_result(), response.get_headers(), response.get_status_code()
+    result = response.get_result(), response.get_headers(), response.get_status_code()
+    self.memo[(text_str, limit)] = result
+
+    return result
+
+
+get_entity_info.memo = {}
+
+
+
+
+
+
+
 
 def get_keyword_info(text_str, limit):
     response = nlu.analyze(
@@ -112,7 +173,14 @@ def get_keyword_info(text_str, limit):
                           )
     )
 
-    return response.get_result(), response.get_headers(), response.get_status_code()
+    result = response.get_result(), response.get_headers(), response.get_status_code()
+    self.memo[(text_str, limit)] = result
+
+    return result
+
+
+get_keyword_info.memo = {}
+
 
 
 def get_relational_info(text_str):
@@ -121,7 +189,20 @@ def get_relational_info(text_str):
         features=Features(relations=RelationsOptions())
     )
 
-    return response.get_result(), response.get_headers(), response.get_status_code()
+    result =  response.get_result(), response.get_headers(), response.get_status_code()
+
+    self.memo[text_str] = result
+
+    return result
+
+
+get_relational_info.memo = {}
+
+
+
+
+
+
 
 
 def get_semantic_roles(text_str, limit):
@@ -130,7 +211,21 @@ def get_semantic_roles(text_str, limit):
         features=Features(semantic_roles=SemanticRolesOptions(keywords=True, entities=True, limit=limit))
     )
 
-    return response.get_result(), response.get_headers(), response.get_status_code()
+    result = response.get_result(), response.get_headers(), response.get_status_code()
+
+    self.memo[(text_str, limit)] = result
+
+    return result
+
+
+get_semantic_roles.memo = {}
+
+
+
+
+
+
+
 
 
 def get_targeted_sentiment(text_str, target_words_phrases_list):
@@ -139,7 +234,18 @@ def get_targeted_sentiment(text_str, target_words_phrases_list):
         features=Features(sentiment=SentimentOptions(document=True, targets=target_words_phrases_list))
     )
 
-    return response.get_result(), response.get_headers(), response.get_status_code()
+    result = response.get_result(), response.get_headers(), response.get_status_code()
+
+    self.memo[(text_str, target_words_phrases_list)] = result
+    return result
+
+
+get_targeted_sentiment.memo = {}
+
+
+
+
+
 
 
 def get_syntax_info(text_str):
@@ -151,4 +257,11 @@ def get_syntax_info(text_str):
                                        part_of_speech=True)))
     )
 
-    return response.get_result(), response.get_headers(), response.get_status_code()
+    result = response.get_result(), response.get_headers(), response.get_status_code()
+
+    self.memo[text_str] = result
+    return result
+
+
+get_syntax_info.memo = {}
+
