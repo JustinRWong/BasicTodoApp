@@ -39,6 +39,10 @@ def analyze_tone(inputtedTxt):
     try:
         # Invoke a Tone Analyzer method
         #         inputtedTxt = "Team, I know that times are tough! "
+
+        if inputtedTxt in self.memo:
+            return self.memo[inputtedTxt]
+
         j = tone_analyzer.tone({'text': inputtedTxt}, content_type='application/json')
 
         result = j.get_result(), j.get_headers(), j.get_status_code()
@@ -80,20 +84,23 @@ def to_sentiment_dict(ret_res):
     return sents_vector
 
 
-to_sentiment_dict.memo = {}
 
 
 
 
 
 def get_categories(text_str, limit=3):
+    key = (text_str, limit)
+    if key in self.memo:
+        return self.memo[key]
+
     response = nlu.analyze(
         text=text_str,
         features=Features(categories=CategoriesOptions(limit=limit))
     )
 
-    return response.get_result(), response.get_headers(), response.get_status_code()
-
+    result = response.get_result(), response.get_headers(), response.get_status_code()
+    self.memo[(text_str, limit)] = result
 
 get_categories.memo = {}
 
@@ -104,8 +111,9 @@ get_categories.memo = {}
 
 
 def get_concepts(text_str, limit=3):
-    if (text_str, limit) in self.memo.keys():
-        return self.memo[(text_str, limit)]
+    key = (text_str, limit)
+    if key in self.memo:
+        return self.memo[key]
 
     response = nlu.analyze(
         text=text_str,
@@ -126,6 +134,10 @@ get_concepts.memo = {}
 
 
 def get_targeted_emotion(text_str, target_words_and_phrase_list):
+    key = (text_str, target_words_and_phrase_list)
+    if key in self.memo:
+        return self.memo[key]
+
     response = nlu.analyze(
         text=text_str,
         features=Features(emotion=EmotionOptions(targets=target_words_and_phrase_list))
@@ -143,6 +155,10 @@ get_targeted_emotion.memo = {}
 
 
 def get_entity_info(text_str, limit):
+    key = (text_str, limit)
+    if key in self.memo:
+        return self.memo[key]
+
     response = nlu.analyze(
         text=text_str,
         features=Features(entities=EntitiesOptions(sentiment=True, mentions=True, emotion=True, limit=limit))
@@ -164,6 +180,11 @@ get_entity_info.memo = {}
 
 
 def get_keyword_info(text_str, limit):
+    key = (text_str, limit)
+    if key in self.memo:
+        return self.memo[key]
+
+
     response = nlu.analyze(
         text=text_str,
         features=Features(keywords=KeywordsOptions(sentiment=True,
@@ -184,6 +205,10 @@ get_keyword_info.memo = {}
 
 
 def get_relational_info(text_str):
+    key = text_str
+    if key in self.memo:
+        return self.memo[key]
+
     response = nlu.analyze(
         text=text_str,
         features=Features(relations=RelationsOptions())
@@ -206,6 +231,10 @@ get_relational_info.memo = {}
 
 
 def get_semantic_roles(text_str, limit):
+    key = (text_str, limit)
+    if key in self.memo:
+        return self.memo[key]
+
     response = nlu.analyze(
         text=text_str,
         features=Features(semantic_roles=SemanticRolesOptions(keywords=True, entities=True, limit=limit))
@@ -229,6 +258,10 @@ get_semantic_roles.memo = {}
 
 
 def get_targeted_sentiment(text_str, target_words_phrases_list):
+    key = (text_str, target_words_phrases_list)
+    if key in self.memo:
+        return self.memo[key]
+
     response = nlu.analyze(
         text=text_str,
         features=Features(sentiment=SentimentOptions(document=True, targets=target_words_phrases_list))
@@ -249,6 +282,10 @@ get_targeted_sentiment.memo = {}
 
 
 def get_syntax_info(text_str):
+    key = text_str
+    if key in self.memo:
+        return self.memo[key]
+
     response = nlu.analyze(
         text=text_str,
         features=Features(syntax=SyntaxOptions(
