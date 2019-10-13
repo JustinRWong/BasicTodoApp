@@ -40,14 +40,14 @@ def analyze_tone(inputtedTxt):
         # Invoke a Tone Analyzer method
         #         inputtedTxt = "Team, I know that times are tough! "
 
-        if inputtedTxt in self.memo:
-            return self.memo[inputtedTxt]
+        if inputtedTxt in analyze_tone.memo:
+            return analyze_tone.memo[inputtedTxt]
 
         j = tone_analyzer.tone({'text': inputtedTxt}, content_type='application/json')
 
         result = j.get_result(), j.get_headers(), j.get_status_code()
 
-        self.memo[inputtedTxt] = result
+        analyze_tone.memo[inputtedTxt] = result
 
         return result
 
@@ -66,8 +66,8 @@ analyze_tone.memo = {}
 def to_sentiment_dict(ret_res):
     ## Default sentiment vector of all possible emotions returned from IBM Watson Tone Analyzer
     ## THIS IS TEMPLATE
-    sentiment_vector_zeroed = {"anger": 0.0, "fear": 0.0, "joy": 0.0, "sadness": 0.0, "snalytical": 0.0,
-                               "sonfident": 0.0, "sentative": 0.0}
+    sentiment_vector_zeroed = {"anger": 0.0, "fear": 0.0, "joy": 0.0, "sadness": 0.0, "analytical": 0.0,
+                               "confident": 0.0, "sentative": 0.0}
 
     # ret_res['document_tone']['tones']
     ## Create (tone, score) pairs from ret_res
@@ -91,8 +91,8 @@ def to_sentiment_dict(ret_res):
 
 def get_categories(text_str, limit=3):
     key = (text_str, limit)
-    if key in self.memo:
-        return self.memo[key]
+    if key in get_categories.memo:
+        return get_categories.memo[key]
 
     response = nlu.analyze(
         text=text_str,
@@ -100,7 +100,7 @@ def get_categories(text_str, limit=3):
     )
 
     result = response.get_result(), response.get_headers(), response.get_status_code()
-    self.memo[(text_str, limit)] = result
+    get_categories.memo[(text_str, limit)] = result
 
 get_categories.memo = {}
 
@@ -112,8 +112,8 @@ get_categories.memo = {}
 
 def get_concepts(text_str, limit=3):
     key = (text_str, limit)
-    if key in self.memo:
-        return self.memo[key]
+    if key in get_concepts.memo:
+        return get_concepts.memo[key]
 
     response = nlu.analyze(
         text=text_str,
@@ -121,7 +121,7 @@ def get_concepts(text_str, limit=3):
     )
 
     result = response.get_result(), response.get_headers(), response.get_status_code()
-    self.memo[(text_str, limit)] = result
+    get_concepts.memo[(text_str, limit)] = result
 
     return result
 
@@ -135,8 +135,8 @@ get_concepts.memo = {}
 
 def get_targeted_emotion(text_str, target_words_and_phrase_list):
     key = (text_str, target_words_and_phrase_list)
-    if key in self.memo:
-        return self.memo[key]
+    if key in get_targeted_emotion.memo:
+        return get_targeted_emotion.memo[key]
 
     response = nlu.analyze(
         text=text_str,
@@ -145,7 +145,7 @@ def get_targeted_emotion(text_str, target_words_and_phrase_list):
 
     result = response.get_result(), response.get_headers(), response.get_status_code()
 
-    self.memo[(text_str, target_words_and_phrase_list)] = result
+    get_targeted_emotion.memo[(text_str, target_words_and_phrase_list)] = result
 
     return result
 
@@ -156,8 +156,8 @@ get_targeted_emotion.memo = {}
 
 def get_entity_info(text_str, limit):
     key = (text_str, limit)
-    if key in self.memo:
-        return self.memo[key]
+    if key in get_entity_info.memo:
+        return get_entity_info.memo[key]
 
     response = nlu.analyze(
         text=text_str,
@@ -165,7 +165,7 @@ def get_entity_info(text_str, limit):
     )
 
     result = response.get_result(), response.get_headers(), response.get_status_code()
-    self.memo[(text_str, limit)] = result
+    get_entity_info.memo[(text_str, limit)] = result
 
     return result
 
@@ -181,8 +181,8 @@ get_entity_info.memo = {}
 
 def get_keyword_info(text_str, limit):
     key = (text_str, limit)
-    if key in self.memo:
-        return self.memo[key]
+    if key in get_keyword_info.memo:
+        return get_keyword_info.memo[key]
 
 
     response = nlu.analyze(
@@ -195,7 +195,7 @@ def get_keyword_info(text_str, limit):
     )
 
     result = response.get_result(), response.get_headers(), response.get_status_code()
-    self.memo[(text_str, limit)] = result
+    get_keyword_info.memo[(text_str, limit)] = result
 
     return result
 
@@ -206,8 +206,8 @@ get_keyword_info.memo = {}
 
 def get_relational_info(text_str):
     key = text_str
-    if key in self.memo:
-        return self.memo[key]
+    if key in get_relational_info.memo:
+        return get_relational_info.memo[key]
 
     response = nlu.analyze(
         text=text_str,
@@ -216,7 +216,7 @@ def get_relational_info(text_str):
 
     result =  response.get_result(), response.get_headers(), response.get_status_code()
 
-    self.memo[text_str] = result
+    get_relational_info.memo[text_str] = result
 
     return result
 
@@ -232,8 +232,8 @@ get_relational_info.memo = {}
 
 def get_semantic_roles(text_str, limit):
     key = (text_str, limit)
-    if key in self.memo:
-        return self.memo[key]
+    if key in get_semantic_roles.memo:
+        return get_semantic_roles.memo[key]
 
     response = nlu.analyze(
         text=text_str,
@@ -242,7 +242,7 @@ def get_semantic_roles(text_str, limit):
 
     result = response.get_result(), response.get_headers(), response.get_status_code()
 
-    self.memo[(text_str, limit)] = result
+    get_semantic_roles.memo[(text_str, limit)] = result
 
     return result
 
@@ -259,8 +259,8 @@ get_semantic_roles.memo = {}
 
 def get_targeted_sentiment(text_str, target_words_phrases_list):
     key = (text_str, target_words_phrases_list)
-    if key in self.memo:
-        return self.memo[key]
+    if key in get_targeted_sentiment.memo:
+        return get_targeted_sentiment.memo[key]
 
     response = nlu.analyze(
         text=text_str,
@@ -269,7 +269,7 @@ def get_targeted_sentiment(text_str, target_words_phrases_list):
 
     result = response.get_result(), response.get_headers(), response.get_status_code()
 
-    self.memo[(text_str, target_words_phrases_list)] = result
+    get_targeted_sentiment.memo[(text_str, target_words_phrases_list)] = result
     return result
 
 
@@ -283,8 +283,8 @@ get_targeted_sentiment.memo = {}
 
 def get_syntax_info(text_str):
     key = text_str
-    if key in self.memo:
-        return self.memo[key]
+    if key in get_syntax_info.memo:
+        return get_syntax_info.memo[key]
 
     response = nlu.analyze(
         text=text_str,
@@ -296,9 +296,8 @@ def get_syntax_info(text_str):
 
     result = response.get_result(), response.get_headers(), response.get_status_code()
 
-    self.memo[text_str] = result
+    get_syntax_infot.memo[text_str] = result
     return result
 
 
 get_syntax_info.memo = {}
-
