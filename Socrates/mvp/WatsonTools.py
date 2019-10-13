@@ -26,6 +26,10 @@ nlu = NaturalLanguageUnderstandingV1(
 )
 
 
+##############################################################################
+
+
+
 ## Takes in some string text and
 ## make call to IBM Watson Tone Analyzer with the inputted text
 ## Returns a tuple of 3 outputs directly from the api call
@@ -84,10 +88,7 @@ def to_sentiment_dict(ret_res):
     return sents_vector
 
 
-
-
-
-
+####################################################################3
 
 def get_categories(text_str, limit=3):
     key = (text_str, limit)
@@ -105,10 +106,7 @@ def get_categories(text_str, limit=3):
 get_categories.memo = {}
 
 
-
-
-
-
+########################################################################
 
 def get_concepts(text_str, limit=3):
     key = (text_str, limit)
@@ -129,9 +127,7 @@ def get_concepts(text_str, limit=3):
 get_concepts.memo = {}
 
 
-
-
-
+########################################################
 
 def get_targeted_emotion(text_str, target_words_and_phrase_list):
     key = (text_str, target_words_and_phrase_list)
@@ -153,6 +149,8 @@ def get_targeted_emotion(text_str, target_words_and_phrase_list):
 get_targeted_emotion.memo = {}
 
 
+################################################################################
+
 
 def get_entity_info(text_str, limit):
     key = (text_str, limit)
@@ -173,10 +171,7 @@ def get_entity_info(text_str, limit):
 get_entity_info.memo = {}
 
 
-
-
-
-
+####################################################################
 
 
 def get_keyword_info(text_str, limit):
@@ -203,6 +198,7 @@ def get_keyword_info(text_str, limit):
 get_keyword_info.memo = {}
 
 
+####################################################
 
 def get_relational_info(text_str):
     key = text_str
@@ -225,9 +221,7 @@ get_relational_info.memo = {}
 
 
 
-
-
-
+#################################################################
 
 
 def get_semantic_roles(text_str, limit):
@@ -250,11 +244,7 @@ def get_semantic_roles(text_str, limit):
 get_semantic_roles.memo = {}
 
 
-
-
-
-
-
+##################################################################
 
 
 def get_targeted_sentiment(text_str, target_words_phrases_list):
@@ -276,9 +266,7 @@ def get_targeted_sentiment(text_str, target_words_phrases_list):
 get_targeted_sentiment.memo = {}
 
 
-
-
-
+#######################################################################
 
 
 def get_syntax_info(text_str):
